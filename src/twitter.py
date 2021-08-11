@@ -7,6 +7,7 @@ from wordcloud import WordCloud
 import pandas as pd
 import re
 import matplotlib.pyplot as plt
+import spacy
 
 # Obtener información de .env
 load_dotenv(dotenv_path = '.env')
@@ -22,6 +23,9 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+
+# Create nlp object
+nlp = spacy.load('es_core_news_sm')
 
 # Clean text from tweets to get main info
 def clean_txt(tweet: str):
@@ -66,8 +70,14 @@ def print_popular_tweet(topic: str, num_items: int):
 def get_tweets(topic: str, num_items: int):
 	return [tweet._json["full_text"] for tweet in tweepy.Cursor(api.search, q=topic, tweet_mode="extended").items(num_items)]
 
+def get_lexical_tokens(tweet: str):
+	doc = nlp(tweet)
+
+	lexical_tokens = [t.orth_ for t in doc if not t.is_punct | t.is_stop]
+	return ' '.join(lexical_tokens)
+
 # Create a dataframe with a column called Tweets
-df = pd.DataFrame(get_tweets('Messi', 100), columns=['Tweets'])
+df = pd.DataFrame(get_tweets('vizkyconzeta', 10000), columns=['Tweets'])
 
 # Apply clean text
 df['Tweets'] = df['Tweets'].apply(clean_txt)
@@ -76,8 +86,11 @@ df['Tweets'] = df['Tweets'].apply(clean_txt)
 df['Subjectivity'] = df['Tweets'].apply(get_subjectivity)
 df['Polarity'] = df['Tweets'].apply(get_polarity)
 
+# Apply NLP
+df['Lexical'] = df['Tweets'].apply(get_lexical_tokens)
+
 # Plot the word cloud
-allWords = ' '.join([tweets for tweets in df['Tweets']])
+allWords = ' '.join([tweets for tweets in df['Lexical']])
 wordCloud = WordCloud(width = 500, height = 300, random_state = 21, max_font_size = 119).generate(allWords)
 
 plt.imshow(wordCloud, interpolation = 'bilinear')
