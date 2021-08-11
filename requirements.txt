@@ -1,0 +1,7 @@
+spacy
+es-core-news-sm==3.1.0
+en-core-news-sm==3.1.0
+tweepy
+dotenv
+textblob
+wordcloud
