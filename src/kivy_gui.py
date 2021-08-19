@@ -8,6 +8,7 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.core.window import Window
 import threading
 import re
+import json
 from twitter import TwitterAnalyzer
 from wiki import Wikipedia
 from exceptions import *
@@ -232,6 +233,16 @@ class KivyApp(App):
         self.window.clear_widgets()
 
         # Button widget
+        self.button_popular = Button(
+                      text= "Popular tweets",
+                      size_hint_y = 0.1,
+                      bold= True,
+                      background_color ='#00FFCE',
+                      )
+        self.button_popular.bind(on_press=self.callback_popular)
+        self.window.add_widget(self.button_popular)
+
+        # Button widget
         self.button_wordcloud = Button(
                       text= "Word Cloud",
                       size_hint_y = 0.1,
@@ -270,6 +281,50 @@ class KivyApp(App):
                       )
         self.button_results.bind(on_press=self.callback_results)
         self.window.add_widget(self.button_results)
+
+    def callback_popular(self, instance):
+        # Clear all previous widgets
+        self.window.clear_widgets()
+
+        # Get popular tweets
+        popular_tweets = self.analyzer.get_popular_tweets(self.topic_query)
+
+        count = 1
+
+        popular_text = ''
+
+        for tweet in popular_tweets:
+            popular_text = popular_text + str(count) + '. ' + tweet._json["user"]["name"] + ' - ' + tweet._json["user"]["screen_name"] + ': ' + tweet._json["full_text"] + '.\nRT: ' + str(tweet._json["retweet_count"]) + '. FAV: ' + str(tweet._json["favorite_count"]) + '.\n\n'
+            count += 1
+
+        # Popular label
+        self.popular = Label(
+                       text = 'POPULAR TWEETS',
+                       font_size = 18,
+                       color = '#00FFCE',
+                       size_hint_y = 0.2)
+
+        self.window.add_widget(self.popular)
+
+        # Count label
+        self.popular_tweets = Label(
+                       text = popular_text,
+                       font_size = 15,
+                       color = '#00FFCE',
+                       text_size = (self.window.width, None),
+                       size_hint_y = 0.7)
+
+        self.window.add_widget(self.popular_tweets)
+
+        # Button widget
+        self.button = Button(
+                      text= "Go Back",
+                      size_hint_y = 0.1,
+                      bold= True,
+                      background_color ='#00FFCE',
+                      )
+        self.button.bind(on_press=self.callback_menu)
+        self.window.add_widget(self.button)
 
     def callback_wordcloud(self, instance):
         # Clear all previous widgets

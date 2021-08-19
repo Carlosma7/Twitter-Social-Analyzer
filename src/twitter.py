@@ -66,6 +66,9 @@ class TwitterAnalyzer():
 			print('------------------------------------------------')
 			print('\n\n\n\n')
 
+	def get_popular_tweets(self, topic: str):
+		return tweepy.Cursor(self.api.search, q=topic, result_type="popular", tweet_mode="extended").items(3)
+
 	def get_tweets(self, topic: str, num_items: int):
 		return [tweet._json["full_text"] for tweet in tweepy.Cursor(self.api.search, q=topic, tweet_mode="extended").items(num_items)]
 
