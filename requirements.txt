@@ -9,3 +9,5 @@ kivy
 pandas
 matplotlib
 FPDF
+BeautifulSoup
+urllib
