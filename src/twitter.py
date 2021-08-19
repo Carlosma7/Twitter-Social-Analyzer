@@ -8,6 +8,8 @@ import pandas as pd
 import re
 import matplotlib.pyplot as plt
 import spacy
+import PIL.Image as ImageP
+
 
 class TwitterAnalyzer():
 	def __init__(self):
@@ -75,7 +77,6 @@ class TwitterAnalyzer():
 		return ' '.join(lexical_tokens)
 
 	def analyze(self, topic: str, num_items: int, lang: str):
-
 		# Create nlp object
 		if lang == 'English':
 			self.nlp = spacy.load('en_core_web_sm')
@@ -83,62 +84,65 @@ class TwitterAnalyzer():
 			self.nlp = spacy.load('es_core_news_sm')
 
 		# Create a dataframe with a column called Tweets
-		df = pd.DataFrame(self.get_tweets(topic=topic,num_items=num_items), columns=['Tweets'])
+		self.df = pd.DataFrame(self.get_tweets(topic=topic,num_items=num_items), columns=['Tweets'])
 
 		# Apply clean text
-		df['Tweets'] = df['Tweets'].apply(self.clean_txt)
+		self.df['Tweets'] = self.df['Tweets'].apply(self.clean_txt)
 
 		# Define subjectivity and polarity of tweets
-		df['Subjectivity'] = df['Tweets'].apply(self.get_subjectivity)
-		df['Polarity'] = df['Tweets'].apply(self.get_polarity)
+		self.df['Subjectivity'] = self.df['Tweets'].apply(self.get_subjectivity)
+		self.df['Polarity'] = self.df['Tweets'].apply(self.get_polarity)
 
 		# Apply NLP
-		df['Lexical'] = df['Tweets'].apply(self.get_lexical_tokens)
+		self.df['Lexical'] = self.df['Tweets'].apply(self.get_lexical_tokens)
 
 		# Plot the word cloud
-		allWords = ' '.join([tweets for tweets in df['Lexical']])
-		wordCloud = WordCloud(width = 500, height = 300, random_state = 21, max_font_size = 119).generate(allWords)
+		allWords = ' '.join([tweets for tweets in self.df['Lexical']])
+		self.wordCloud = WordCloud(width = 500, height = 300, random_state = 21, max_font_size = 119).generate(allWords)
 
-		plt.imshow(wordCloud, interpolation = 'bilinear')
+		# Save word cloud
+		plt.imshow(self.wordCloud, interpolation = 'bilinear')
 		plt.axis('off')
-		plt.show()
+		plt.savefig('./report/wordcloud.png', bbox_inches='tight')
+		plt.clf()
 
 		# Get the analysis value
-		df['Analysis'] = df['Polarity'].apply(self.get_analysis)
-
-		# Print positive and negative tweets
-		positive_df = df.sort_values(by=['Polarity'], ascending=False)
-		negative_df = df.sort_values(by=['Polarity'], ascending=True)
+		self.df['Analysis'] = self.df['Polarity'].apply(self.get_analysis)
 
 		# Plot the polarity and subjectivity
 		plt.figure(figsize=(8,6))
-		for i in range(0, df.shape[0]):
-			plt.scatter(df['Polarity'][i], df['Subjectivity'][i], color="blue")
+		for i in range(0, self.df.shape[0]):
+			plt.scatter(self.df['Polarity'][i], self.df['Subjectivity'][i], color="blue")
 
 		plt.title('Sentiment Analysis')
 		plt.xlabel('Polarity')
 		plt.ylabel('Subjectivity')
-		plt.show()
-
-		# Get the percentage of positive tweets
-		ntweets = df[df.Analysis == 'Positive']
-		ntweets = ntweets['Tweets']
-
-		percentage_positive = round((ntweets.shape[0] / df.shape[0] * 100), 1)
-
-		# Get the percentage of negative tweets
-		ntweets = df[df.Analysis == 'Negative']
-		ntweets = ntweets['Tweets']
-
-		percentage_negative = round((ntweets.shape[0] / df.shape[0] * 100), 1)
-
-		# Value counts
-		print(df['Analysis'].value_counts())
-		print('Positive percentage: ' + str(percentage_positive) + '%')
-		print('Negative percentage: ' + str(percentage_negative) + '%')
+		plt.savefig('./report/subjectivity.png', bbox_inches='tight')
+		plt.clf()
 
 		plt.title('Sentiment Analysis')
 		plt.xlabel('Sentiment')
 		plt.ylabel('Counts')
-		df['Analysis'].value_counts().plot(kind='bar')
-		plt.show()
+		self.df['Analysis'].value_counts().plot(kind='bar')
+		plt.savefig('./report/analysis.png', bbox_inches='tight')
+		plt.clf()
+
+	def get_resume(self):
+		# Print positive and negative tweets
+		positive_df = self.df.sort_values(by=['Polarity'], ascending=False)
+		negative_df = self.df.sort_values(by=['Polarity'], ascending=True)
+
+		# Get the percentage of positive tweets
+		ntweets = self.df[self.df.Analysis == 'Positive']
+		ntweets = ntweets['Tweets']
+
+		percentage_positive = round((ntweets.shape[0] / self.df.shape[0] * 100), 1)
+
+		# Get the percentage of negative tweets
+		ntweets = self.df[self.df.Analysis == 'Negative']
+		ntweets = ntweets['Tweets']
+
+		percentage_negative = round((ntweets.shape[0] / self.df.shape[0] * 100), 1)
+
+		# Value counts
+		return(dict(self.df['Analysis'].value_counts()), percentage_positive, percentage_negative)
