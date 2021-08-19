@@ -1,4 +1,4 @@
-# Empty value error
-class EmptyError(Exception):
-	"""Raised when the input field is empty"""
+# Empty topic value error
+class EmptyTopicError(Exception):
+	"""Raised when the input field for topic is empty"""
 	pass
