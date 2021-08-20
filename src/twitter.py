@@ -11,7 +11,15 @@ import spacy
 
 
 class TwitterAnalyzer():
+	"""
+	Twitter Sentiment Analyzer that contains a tweepy API. It can search most popular tweets, get subjectivity, polarity and a resume about any topic given.
+	"""
+
 	def __init__(self):
+		"""
+		Constructor. Defines the Tweepy API.
+		"""
+
 		# Obtener información de .env
 		load_dotenv(dotenv_path = '.env')
 
@@ -28,6 +36,11 @@ class TwitterAnalyzer():
 
 	# Clean text from tweets to get main info
 	def clean_txt(self, tweet: str):
+		"""
+		Takes a tweet text.
+		Returns the tweet text without any mention, hashtag, RT or link.
+		"""
+
 		# Remove mentions
 		tweet = re.sub(r'@[A-Za-z0-9_]+', '', tweet)
 		# Remove hashtags
@@ -41,14 +54,29 @@ class TwitterAnalyzer():
 
 	# Get the subjectivity of tweet
 	def get_subjectivity(self, tweet: str):
+		"""
+		Takes a tweet text.
+		Returns the subjectivity.
+		"""
+
 		return TextBlob(tweet).sentiment.subjectivity
 
 	# Get the polarity of tweet
 	def get_polarity(self, tweet: str):
+		"""
+		Takes a tweet text.
+		Returns the polarity.
+		"""
+
 		return TextBlob(tweet).sentiment.polarity
 
 	# Get the positive, negative or neutral analysis
 	def get_analysis(self, score: float):
+		"""
+		Takes a score from a tweet.
+		Returns the analysis (positive, negative or neutral).
+		"""
+
 		if score < 0:
 			return 'Negative'
 		elif score == 0:
@@ -57,6 +85,11 @@ class TwitterAnalyzer():
 			return 'Positive'
 
 	def print_popular_tweet(self, topic: str, num_items: int):
+		"""
+		Takes a topic and a number of tweets.
+		Prints the n most popular tweets about the topic.
+		"""
+
 		for tweet in tweepy.Cursor(self.api.search, q=topic, result_type="popular", tweet_mode="extended").items(num_items):
 			print('------------------------------------------------')
 			print("TWEET:" + tweet._json["full_text"])
@@ -67,18 +100,38 @@ class TwitterAnalyzer():
 			print('\n\n\n\n')
 
 	def get_popular_tweets(self, topic: str):
+		"""
+		Takes a topic.
+		Returns the 3 most popular tweets about that topic.
+		"""
+
 		return tweepy.Cursor(self.api.search, q=topic, result_type="popular", tweet_mode="extended").items(3)
 
 	def get_tweets(self, topic: str, num_items: int):
+		"""
+		Takes a topic and a number of tweets.
+		Returns the n most recent tweets about that topic.
+		"""
+
 		return [tweet._json["full_text"] for tweet in tweepy.Cursor(self.api.search, q=topic, tweet_mode="extended").items(num_items)]
 
 	def get_lexical_tokens(self, tweet: str):
+		"""
+		Takes a tweet text.
+		Returns just the lexical tokens.
+		"""
+
 		doc = self.nlp(tweet)
 
 		lexical_tokens = [t.orth_ for t in doc if not t.is_punct | t.is_stop]
 		return ' '.join(lexical_tokens)
 
 	def analyze(self, topic: str, num_items: int, lang: str):
+		"""
+		Takes a topic, a number of tweets and language.
+		Obtains n most recent tweets, applies NLP, generates a word cloud, computes subjectivity and polarity and creates several plots.
+		"""
+
 		# Create nlp object
 		if lang == 'English':
 			self.nlp = spacy.load('en_core_web_sm')
@@ -130,9 +183,9 @@ class TwitterAnalyzer():
 		plt.clf()
 
 	def get_resume(self):
-		# Print positive and negative tweets
-		positive_df = self.df.sort_values(by=['Polarity'], ascending=False)
-		negative_df = self.df.sort_values(by=['Polarity'], ascending=True)
+		"""
+		Returns the value counts and percentages of the tweets analysis.
+		"""
 
 		# Get the percentage of positive tweets
 		ntweets = self.df[self.df.Analysis == 'Positive']

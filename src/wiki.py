@@ -4,17 +4,25 @@ from bs4 import BeautifulSoup
 import re
 
 class Wikipedia():
+	"""
+	Wikipedia spanish unoficial parser. Contains all the tools to search a Wiki page about a concrete topic if it exists.
+	"""
 
 	def get_article(self, source: str):
+		"""
+		Takes a topic as a source.
+		Returns the main paragraph from Wikipedia about that topic, if it exists.
+		"""
+
 		# Parse source for url
 		source = '_'.join([word.capitalize() for word in source.split()])
+
 		try:
 			# Specify url of the web page
 			source = urlopen(f'https://es.wikipedia.org/wiki/{source}').read()
 
 			# Make a soup
 			soup = BeautifulSoup(source,'lxml')
-			soup
 
 			# Extract the plain text content from paragraphs
 			paras = []
@@ -35,6 +43,7 @@ class Wikipedia():
 
 			# Replace '\n' (a new line) with '' and end the string at $1000.
 			text = text.split('\n')
+			
 			if not text[0]:
 				raise ValueError('Empty search')
 

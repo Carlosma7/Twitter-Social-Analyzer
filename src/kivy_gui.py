@@ -14,9 +14,17 @@ from wiki import Wikipedia
 from exceptions import *
 
 class KivyApp(App):
+    """
+    GUI App that contains all the Twitter Analyzer service.
+    """
+
     def build(self):
+        """
+        Creates the initial window and print a welcome message.
+        Returns the apps window.
+        """
+
         self.language = 'English'
-        #returns a window object with all it's widgets
         self.title = "Twitter Sentiment Analysis"
         self.window = GridLayout()
         self.window.cols = 1
@@ -55,6 +63,11 @@ class KivyApp(App):
         return self.window
 
     def callback_start_button(self, instance):
+        """
+        Takes the button callback instance.
+        Defines a new window with a topic input.
+        """
+
         # Clear all previous widgets
         self.window.clear_widgets()
 
@@ -90,11 +103,18 @@ class KivyApp(App):
         self.window.add_widget(self.button)
 
     def callback_analyze_button(self, instance):
+        """
+        Takes the button callback instance.
+        Checks the previous topic is not empty.
+        Defines a new window with Wikipedia info about the topic.
+        """
+
         try:
             # Check if topic is empty
             if not self.topic_input.text:
                 raise EmptyTopicError('Topic cannot be empty')
 
+            # Gets Wikipedia article
             wiki = Wikipedia()
             article = wiki.get_article(self.topic_input.text)
             self.topic_query = self.topic_input.text
@@ -107,15 +127,16 @@ class KivyApp(App):
 
             if not article:
                 article = "Wikipedia couldn't find or redirect to the topic you are looking for."
+
             # Topic label
-            self.topic = Label(
+            self.article = Label(
                            text = article,
                            text_size = (self.window.width, None),
                            font_size = 18,
                            color = '#00FFCE',
                            size_hint_x = 0.8)
 
-            self.window.add_widget(self.topic)
+            self.window.add_widget(self.article)
 
             # Button widget
             self.button = Button(
@@ -134,6 +155,11 @@ class KivyApp(App):
             self.topic_input.hint_text_color = "#FF0000"
 
     def callback_settings(self, instance):
+        """
+        Takes the button callback instance.
+        Defines a new window with the analysis settings inputs.
+        """
+
         # Clear all previous widgets
         self.window.clear_widgets()
 
@@ -188,9 +214,20 @@ class KivyApp(App):
 
 
     def callback_language(self, value):
+        """
+        Takes value of the new language.
+        Sets the new language.
+        """
+
         self.language = value.text
 
     def callback_analyze_check(self, instance):
+        """
+        Takes the button callback instance.
+        Checks if settings inputs aren't empty and if number of tweets is an integer.
+        Defines a new window with a loading screen and throws a thread with the Twitter Analysis.
+        """
+
         try:
             # Check if topic is empty
             if not self.topic_input.text:
@@ -221,6 +258,11 @@ class KivyApp(App):
             self.num_items_input.hint_text_color = "#FF0000"
 
     def callback_analyze(self):
+        """
+        Set the parameters and start the analysis.
+        Calls the menu window.
+        """
+
         # Start analyze
         self.analyzer = TwitterAnalyzer()
         self.analyzer.analyze(self.topic_query, self.num_items, self.language)
@@ -228,6 +270,10 @@ class KivyApp(App):
         self.callback_menu(None)
 
     def callback_menu(self, instance):
+        """
+        Takes the button callback instance.
+        Defines a new window with a button menu for the different parts of the analysis.
+        """
 
         # Clear all previous widgets
         self.window.clear_widgets()
@@ -283,6 +329,11 @@ class KivyApp(App):
         self.window.add_widget(self.button_results)
 
     def callback_popular(self, instance):
+        """
+        Takes the button callback instance.
+        Defines a new window with most popular tweets about the topic.
+        """
+
         # Clear all previous widgets
         self.window.clear_widgets()
 
@@ -327,6 +378,11 @@ class KivyApp(App):
         self.window.add_widget(self.button)
 
     def callback_wordcloud(self, instance):
+        """
+        Takes the button callback instance.
+        Defines a new window with a word cloud associated to the topic.
+        """
+
         # Clear all previous widgets
         self.window.clear_widgets()
         # Image Widget
@@ -343,6 +399,11 @@ class KivyApp(App):
         self.window.add_widget(self.button)
 
     def callback_subjectivity(self, instance):
+        """
+        Takes the button callback instance.
+        Defines a new window with the tweets subjectivity-polarity graph.
+        """
+
         # Clear all previous widgets
         self.window.clear_widgets()
         # Image Widget
@@ -359,6 +420,11 @@ class KivyApp(App):
         self.window.add_widget(self.button)
 
     def callback_analysis(self, instance):
+        """
+        Takes the button callback instance.
+        Defines a new window with the sentiments bar plot.
+        """
+
         # Clear all previous widgets
         self.window.clear_widgets()
         # Image Widget
@@ -375,15 +441,18 @@ class KivyApp(App):
         self.window.add_widget(self.button)
 
     def callback_results(self, instance):
+        """
+        Takes the button callback instance.
+        Defines a new window with the stats and conclusion.
+        """
+
         # Clear all previous widgets
         self.window.clear_widgets()
-        # Image Widget
-        #print('Positive percentage: ' + str(percentage_positive) + '%')
-        #print('Negative percentage: ' + str(percentage_negative) + '%')
 
+        # Gets resume stats
         counts, positive, negative = self.analyzer.get_resume()
 
-        # Count label
+        # Stats label
         self.stats = Label(
                        text = 'STATS',
                        font_size = 18,
@@ -408,14 +477,14 @@ class KivyApp(App):
 
         self.window.add_widget(self.counts)
 
-        # Positive label
-        self.positive = Label(
+        # Conclusion label
+        self.conclusion = Label(
                        text = f'CONCLUSION',
                        font_size = 18,
                        color = '#00FFCE',
                        size_hint_y = 0.2)
 
-        self.window.add_widget(self.positive)
+        self.window.add_widget(self.conclusion)
 
         # Image Widget
         if (positive - negative) >= 15:
@@ -441,6 +510,5 @@ class KivyApp(App):
         self.window.add_widget(self.button)
 
 
-# run Say Hello App Calss
 if __name__ == "__main__":
     KivyApp().run()
