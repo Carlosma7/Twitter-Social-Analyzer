@@ -1,3 +1,11 @@
+# Sphinx docs
+Makefile
+make.bat
+*.rst
+conf.py
+_static
+_templates
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
