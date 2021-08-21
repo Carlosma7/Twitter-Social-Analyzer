@@ -11,3 +11,4 @@ matplotlib
 FPDF
 BeautifulSoup
 urllib
+invoke

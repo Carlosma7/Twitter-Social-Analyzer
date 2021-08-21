@@ -100,6 +100,21 @@ To install all dependencies just execute:
 pip3 install -r requirements.txt
 ```
 
+### Execution
+---
+
+To execute the program, after the requirements have been installed and the project downloaded, the following command is executed:
+
+```shell
+invoke execute
+```
+
+To clean the cache you can use:
+
+```shell
+invoke clean
+```
+
 ## How to contribute
 ---
 **Twitter Social Analyzer** is an open source project that is open for new contributions if you want to. To contribute to the project you can [contact me](#author) or just open a new *pull request*. Thanks in advance!
