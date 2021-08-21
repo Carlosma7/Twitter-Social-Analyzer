@@ -70,7 +70,7 @@ Here you can view the official project :books: [docs](https://carlosma7.github.i
 ## Install
 ---
 
-### Descarga
+### Download
 ---
 
 **With** Git.
