@@ -60,6 +60,8 @@ The main tools used are:
 ## Demo
 ---
 
+<p align="center"><img src="https://raw.githubusercontent.com/Carlosma7/Twitter-Social-Analyzer/master/img/twitter.gif"/></p>
+
 ## User manual
 ---
 
