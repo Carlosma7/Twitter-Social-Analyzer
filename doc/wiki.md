@@ -11,5 +11,5 @@ Wikipedia spanish unoficial parser. Contains all the tools to search a Wiki page
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Takes a topic as a source. Returns the main paragraph from Wikipedia about that topic, if it exists.
 
 
-| [< Previous](https://carlosma7.github.io/Twitter-Social-Analyzer/twitter) |
-|---------------------------------------------------------------------------|
+| [< Previous](https://carlosma7.github.io/Twitter-Social-Analyzer/doc/twitter) |
+|-------------------------------------------------------------------------------|

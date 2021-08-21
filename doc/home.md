@@ -33,8 +33,8 @@ The main tools used are:
 
 * [Exceptions](https://carlosma7.github.io/Twitter-Social-Analyzer/doc/exceptions)
 * [Kivy](https://carlosma7.github.io/Twitter-Social-Analyzer/doc/kivy)
-* [Twitter](https://carlosma7.github.io/Twitter-Social-Analyzer/twitter)
-* [Wiki](https://carlosma7.github.io/Twitter-Social-Analyzer/wiki)
+* [Twitter](https://carlosma7.github.io/Twitter-Social-Analyzer/doc/twitter)
+* [Wiki](https://carlosma7.github.io/Twitter-Social-Analyzer/doc/wiki)
 
 ## Author
 
