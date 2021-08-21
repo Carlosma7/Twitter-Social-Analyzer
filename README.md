@@ -65,7 +65,7 @@ The main tools used are:
 ## User manual
 ---
 
-Here you can view the official project :books: [docs](https://carlosma7.github.io/Twitter-Social-Analyzer/home) and :notebook_with_decorative_cover: [wiki](https://github.com/Carlosma7/Twitter-Social-Analyzer/wiki) with technical info about the project.
+Here you can view the official project :books: [docs](https://carlosma7.github.io/Twitter-Social-Analyzer/doc/home) and :notebook_with_decorative_cover: [wiki](https://github.com/Carlosma7/Twitter-Social-Analyzer/wiki) with technical info about the project.
  	
 ## Install
 ---
