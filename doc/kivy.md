@@ -9,6 +9,8 @@ GUI App that contains all the Twitter Analyzer service.
 | [build()](https://github.com/Carlosma7/Twitter-Social-Analyzer/blob/263815707f330b05dce8b60841b8a55fcc1d6495/src/kivy_gui.py#L21) |
 | --------------------------------------------------------------------------------------------------------------------------------- |
 
+> [build()](https://github.com/Carlosma7/Twitter-Social-Analyzer/blob/263815707f330b05dce8b60841b8a55fcc1d6495/src/kivy_gui.py#L21)
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Creates the initial window and print a welcome message. Returns the apps window.
 
 | [callback_analysis(instance)](https://github.com/Carlosma7/Twitter-Social-Analyzer/blob/263815707f330b05dce8b60841b8a55fcc1d6495/src/kivy_gui.py#L422) |
