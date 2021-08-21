@@ -102,7 +102,7 @@ pip3 install -r requirements.txt
 
 ## How to contribute
 ---
-Actualmente el proyecto es un **Trabajo Final de Máster** para la **Universidad de Granada** por lo que no se aceptan colaboraciones directas aunque sí admito sugerencias y referencias a posibles mejoras tanto a nivel personal como en *issues* del proyecto. En un futuro se establecerá un nuevo criterio y código de conducta referente al proyecto.
+**Twitter Social Analyzer** is an open source project that is open for new contributions if you want to. To contribute to the project you can [contact me](#author) or just open a new *pull request*. Thanks in advance!
 
 ## Author
 ---
